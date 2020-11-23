@@ -138,20 +138,20 @@ class Display:
 
     def intro(self):
         output = self.SH_YELLOW + ("""
-       ____     ___         _     
-      / __/__ _/ _/__ _____(_)    
-     _\ \/ _ `/ _/ _ `/ __/ /     
-    /___/\_,_/_/ \_,_/_/ /_/      
-      / _ )___  ___  / /__ ___    
-     / _  / _ \/ _ \/  '_/(_-<    
-    /____/\___/\___/_/\_\/___/    
+       ____     ___         _
+      / __/__ _/ _/__ _____(_)
+     _\ \/ _ `/ _/ _ `/ __/ /
+    /___/\_,_/_/ \_,_/_/ /_/
+      / _ )___  ___  / /__ ___
+     / _  / _ \/ _ \/  '_/(_-<
+    /____/\___/\___/_/\_\/___/
 """ if random() > 0.5 else """
- ██████╗     ██████╗ ██╗  ██╗   ██╗██████╗ 
+ ██████╗     ██████╗ ██╗  ██╗   ██╗██████╗
 ██╔═══██╗    ██╔══██╗██║  ╚██╗ ██╔╝╚════██╗
 ██║   ██║    ██████╔╝██║   ╚████╔╝   ▄███╔╝
-██║   ██║    ██╔══██╗██║    ╚██╔╝    ▀▀══╝ 
-╚██████╔╝    ██║  ██║███████╗██║     ██╗   
- ╚═════╝     ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝                                           
+██║   ██║    ██╔══██╗██║    ╚██╔╝    ▀▀══╝
+╚██████╔╝    ██║  ██║███████╗██║     ██╗
+ ╚═════╝     ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝
 """) + self.SH_DEFAULT
         output += "\n" + "~" * (self.columns // 2)
 
@@ -160,7 +160,7 @@ class Display:
     def parse_description(self, desc):
         if not desc:
             return "n/d"
-        
+
         try:
             return html.fromstring(desc).text_content()
 
@@ -174,7 +174,7 @@ class Display:
             ("Title", info["title"]), ("Authors", ", ".join(aut["name"] for aut in info["authors"])),
             ("Identifier", info["identifier"]), ("ISBN", info["isbn"]),
             ("Publishers", ", ".join(pub["name"] for pub in info["publishers"])),
-            ("Rights", info["rights"]),
+            ("Rights", info["rights"] if "rights" in info and info["rights"] else ""),
             ("Description", description[:500] + "..." if len(description) >= 500 else description),
             ("Release Date", info["issued"]),
             ("URL", info["web_url"])
@@ -540,7 +540,7 @@ class SafariBooks:
 
         if "last_chapter_read" in response:
             del response["last_chapter_read"]
-            
+
         for key, value in response.items():
             if value is None:
                 response[key] = 'n/a'
@@ -961,7 +961,7 @@ class SafariBooks:
             escape(self.book_info["description"]),
             subjects,
             ", ".join(escape(pub["name"]) for pub in self.book_info["publishers"]),
-            escape(self.book_info["rights"]) if self.book_info["rights"] else "",
+            escape(self.book_info["rights"]) if "rights" in self.book_info and self.book_info["rights"] else "",
             self.book_info["issued"],
             self.cover,
             "\n".join(manifest),
